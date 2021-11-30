@@ -171,7 +171,7 @@ router.route('/register').post(function  (req,res,next){
             }
 
             const userSession = new UserSession();
-                userSession.userId=user.id;
+                userSession.userId=user._id;
                 userSession.save((err,doc)=>{
                 if(err){
                     return res.send({
@@ -190,5 +190,80 @@ router.route('/register').post(function  (req,res,next){
         })
 
     })
+
+router.route('/logout').post(function (req, res, next) {
+    
+    const { query } = req;
+    const { token } = query;
+    
+    UserSession.findOneAndUpdate(
+        {
+            _id: token,
+            isDeleted: false,
+        },
+        {
+            $set: {
+                isDeleted: true,
+            },
+        },
+        null,
+        (err, sessions) => {
+            if (err) {
+                console.log(err);
+                return res.send({
+                    success: false,
+                    message: 'Server Error',
+                });
+            }
+            return res.send({
+                success: true,
+                message: 'Logged out',
+            });
+        }
+    );
+});
+
+
+router.route('/verify').get(function (req, res, next) {
+    // Get the token
+    const { query } = req;
+    const { token } = query;
+    // ?token=test
+    // Verify the token is one of a kind and it's not deleted.
+    UserSession.find(
+        {
+            _id: token,
+            isDeleted: false,
+        },
+        (err, sessions) => {
+            if (err) {
+                console.log(err);
+                return res.send({
+                    success: false,
+                    message: 'Error: Server error',
+                });
+            }
+            if (sessions.length != 1) {
+                return res.send({
+                    success: false,
+                    message: 'Error: Invalid',
+                });
+            } else {
+                User.findById(sessions[0].userId, (err, user) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        return res.send({
+                            success: true,
+                            message: 'Session valid',
+                            user: user,
+                        });
+                    }
+                });
+            }
+        }
+    );
+});
+
 
     module.exports=router;
