@@ -3,19 +3,19 @@ const bcrypt=require('bcrypt');
 const Schema=mongoose.Schema;
 
 const User = new Schema({
-    Name:{
+    name:{
         type:String,
-        default:''
+        default:' '
     },
-    Username:{
+    username:{
         type:String,
         required:true,
     },
-    Password:{
+    password:{
         type:String,
         required:true
     },
-    Saved:{
+    saved:{
         type:Array,
         default:[]
     },
@@ -26,11 +26,11 @@ const User = new Schema({
 });
 
 User.methods.generateHash = function (password) {
-    return bcrypt.hashSync(password,this.password);
+    return bcrypt.hashSync(password,bcrypt.genSaltSync(8),null);
 };
 
 User.methods.validPassword = function (password) {
-    return bcrypt.compareSync(password, this.Password);
+    return bcrypt.compareSync(password, this.password);
 };
 
 module.exports=mongoose.model('User',User)

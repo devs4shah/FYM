@@ -2,6 +2,9 @@ const express = require('express');
 const {remove} = require('../models/User');
 const router=express.Router();
 const User=require('../models/User');
+const UserSession=require('../models/UserSession');
+const bodyParser=require('body-parser');
+
 
 router.route('/update').put(function(req,res){
     const {body}=req;
@@ -13,7 +16,7 @@ router.route('/update').put(function(req,res){
         removeLiked
         }=body;
 
-        let param={};
+        let params={};
 
         if(addSaved){
             params={$addToSet:{Saved:addSaved}};
@@ -32,7 +35,7 @@ router.route('/update').put(function(req,res){
 
         User.findOnceAndUpdate(
             { _id:id } ,
-            params,
+            param,
             { new : true, upsert : true },   
             function(err,result){
                 if(err){
@@ -45,11 +48,11 @@ router.route('/update').put(function(req,res){
         ); 
 });
 
-router.route('/register').post(function (req,res,next){
-    const {body}= req;
-    const {password,name}=body;
-    let {username}=body;
-
+router.route('/register').post(function  (req,res,next){
+    const { body }= req;
+    const {name,password}=body;
+    let{username}=body;
+    
     if(!name){
         return res.send({
             success:false,
@@ -57,6 +60,7 @@ router.route('/register').post(function (req,res,next){
         });
     }
     if(!username){
+        console.log(username);
         return res.send({
             success:false,
             message:'Username cannot be blank',
@@ -84,7 +88,7 @@ router.route('/register').post(function (req,res,next){
 
     User.find(
         {
-            Username:username,
+            username:username,
         },
         (err,previousUsers)=>{
             if(err){
@@ -101,11 +105,11 @@ router.route('/register').post(function (req,res,next){
             }
 
             const newUser=new User({
-                Name:name,
-                Username:username,
+                name:name,
+                username:username,
             });
 
-            newUser.set({Password:newUser.generateHash(password)});
+            newUser.set({password:newUser.generateHash(password)});
             newUser.save((err,user)=>{
                 console.log(user);
                 if(err){
@@ -142,7 +146,7 @@ router.route('/register').post(function (req,res,next){
         username=username.trim();
 
         User.find({
-            Username:username,
+            username:username,
         },
         (err,users)=>{
             if(err){
@@ -165,6 +169,24 @@ router.route('/register').post(function (req,res,next){
                     message:'Either username and/or password is incorrect'
                 });
             }
+
+            const userSession = new UserSession();
+                userSession.userId=user.id;
+                userSession.save((err,doc)=>{
+                if(err){
+                    return res.send({
+                        success:false,
+                        message:'Error: server error'
+                    });
+                }
+
+                return res.send({
+                    success:true,
+                    message:'Valid sign in',
+                     token:doc._id
+                }) 
+            })
+
         })
 
     })
