@@ -1,6 +1,8 @@
-import {BrowserRouter as Router , Route} from 'react-router-dom';
+// import React, { Component, Suspense } from 'react';
+import {  BrowserRouter as Router } from 'react-router-dom';
+import './sass/App.scss';
 import './App.css';
-import Login from './Login';
+import Login from './Login.jsx';
 
 function App() {
   return (

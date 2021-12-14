@@ -1,0 +1,23 @@
+@import '../../node_modules/bootstrap/scss/bootstrap.scss';
+// @import '/variable.scss';
+
+*{
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    height: 100%;
+    background-color: black;
+}
+
+.btn,
+.btn:focus,
+.btn:active {
+    outline: none !important;
+    box-shadow: none;
+}
+
+.checked-icon {
+    height: 40px;
+    object-fit: contain;
+}

@@ -1,15 +1,15 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { setInStorage } from '../utils/storage';
+import { setInStorage } from './utils/storage';
 import { useHistory } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
-
 import { useSelector, useDispatch } from 'react-redux';
-import { setUser } from '../actions';
+import { setUser } from './actions';
 
-import checkedIcon from '../assets/img/checked.png';
-
+import checkedIcon from './assets/img/checked.png';
+   
 export default function Login(props) {
+   
     const [name, setName] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -31,12 +31,12 @@ export default function Login(props) {
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        // setting document title
-        if (register) {
-            document.title = 'Sign Up | Not IMDb';
-        } else {
-            document.title = 'Sign In | Not IMDb';
+    useEffect(()=>{
+        if(register){
+            document.title='Sign Up | FYM';
+          }
+        else{
+            document.title='Sign In | FYM'
         }
 
         validPassword(password);
@@ -44,15 +44,16 @@ export default function Login(props) {
 
     // redirect to wherever user came from
     function redirect() {
-        if (props.location.state) {
-            history.push('/movie/' + props.location.state.redirectID);
-        } else {
+        // if (props.location.state) {
+        //     history.push('/Login/' + props.location.state.redirectID);
+        // } else {
             history.goBack();
-        }
+        // }
     }
 
     // sign up request
     function signUpRequest() {
+        console.log("Fine");
         setLoading(true);
         // Post request to backend
         axios({
@@ -61,16 +62,22 @@ export default function Login(props) {
             headers: {
                 'Content-Type': 'application/json',
             },
+            
             data: JSON.stringify({
                 name: name,
                 username: username,
                 password: password,
+                
             }),
-        }).then((res) => {
+            
+        }
+        
+        ).then((res) => {
             if (res.data.success) {
+                console.log("Fine");
                 // write token to storage
-                setInStorage('not_imdb_roynulrohan', {
-                    token: res.data.token,
+                setInStorage('fym',{
+                    token:res.data.token,
                 });
                 setLoading(false);
                 // dispatch user to redux and redirect
@@ -100,8 +107,8 @@ export default function Login(props) {
         }).then((res) => {
             if (res.data.success) {
                 // write token to storage
-                setInStorage('not_imdb_roynulrohan', {
-                    token: res.data.token,
+                setInStorage('fym',{
+                    token:res.data.token,
                 });
                 setLoading(false);
                 // dispatch user to redux and redirect
@@ -374,7 +381,9 @@ export default function Login(props) {
                 </div>
                 {/* login container */}
                 <div className='login-container'>{getContainer()}</div>
+              
             </div>
         </CSSTransition>
     );
 }
+
