@@ -119,7 +119,22 @@ router.route('/register').post(function  (req,res,next){
                     });
                 }
                 else{
-                    console.log(newUser);
+                 const userSession = new UserSession();
+                userSession.userId=user._id;
+                userSession.save((err,doc)=>{
+                if(err){
+                    return res.send({
+                        success:false,
+                        message:'Error: server error'
+                    });
+                }
+
+                return res.send({
+                    success:true,
+                    message:'Valid sign in',
+                     token:doc._id
+                }) 
+            })
                 }
             })
 

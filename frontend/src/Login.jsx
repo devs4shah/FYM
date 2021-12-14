@@ -47,8 +47,11 @@ export default function Login(props) {
         // if (props.location.state) {
         //     history.push('/Login/' + props.location.state.redirectID);
         // } else {
-            history.goBack();
+        //    history.goBack();
         // }
+
+        //Change
+        history.goBack()
     }
 
     // sign up request
@@ -57,6 +60,7 @@ export default function Login(props) {
         setLoading(true);
         // Post request to backend
         axios({
+            
             method: 'post',
             url: '/account/register',
             headers: {
@@ -67,14 +71,10 @@ export default function Login(props) {
                 name: name,
                 username: username,
                 password: password,
-                
             }),
-            
         }
-        
         ).then((res) => {
             if (res.data.success) {
-                console.log("Fine");
                 // write token to storage
                 setInStorage('fym',{
                     token:res.data.token,
@@ -106,6 +106,7 @@ export default function Login(props) {
             }),
         }).then((res) => {
             if (res.data.success) {
+                console.log('Print');
                 // write token to storage
                 setInStorage('fym',{
                     token:res.data.token,
@@ -117,7 +118,6 @@ export default function Login(props) {
             } else {
                 setError(res.data.message);
             }
-
             setLoading(false);
         });
     }
