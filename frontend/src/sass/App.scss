@@ -1,6 +1,8 @@
+
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
-// @import './variables';
-*{
+@import './_variable';
+
+* {
     font-family: 'Poppins', sans-serif;
 }
 
@@ -21,13 +23,51 @@ body {
     object-fit: contain;
 }
 
+.fade-appear {
+    opacity: 0;
+    z-index: 1;
+}
+
+.fade-appear.fade-appear-active {
+    opacity: 1;
+    transition: opacity 600ms linear;
+}
+
+.fade-enter {
+    opacity: 0;
+}
+
+.fade-enter.fade-enter-active {
+    opacity: 1;
+    transition: opacity 600ms linear;
+}
+
+.fade-exit {
+    opacity: 1;
+}
+
+.fade-exit.fade-exit-active {
+    opacity: 0;
+    transition: opacity 600ms linear;
+}
+
+.fade-exit-done {
+    opacity: 0;
+}
+
+.profile-dropdown {
+    width: 200px;
+}
+
+.browse-dropdown {
+    width: 175px;
+}
 
 .login-background {
     position: fixed;
     width: 100%;
     min-height: 100%;
 }
-
 
 .background-default {
     position: absolute;
@@ -37,7 +77,6 @@ body {
     top: 0px;
     bottom: 0px;
 }
-
 
 .background-custom {
     position: absolute;
@@ -61,6 +100,281 @@ body {
     background-color: black;
 }
 
+.browse-search {
+    font-size: 24px;
+    color: $warning;
+    text-align: center;
+    border: none;
+    background-color: $container-color;
+}
+
+.input-group {
+    select {
+        background-color: $container-color;
+        color: $white;
+        border-color: $container-color;
+    }
+
+    select:active,
+    select:focus {
+        outline: none !important;
+        box-shadow: none;
+        border-color: $container-color;
+    }
+
+    select:disabled {
+        background-color: $container-color;
+    }
+
+    input {
+        background-color: $container-color;
+        color: $white;
+        border-color: $container-color;
+    }
+
+    input:active,
+    input:focus {
+        color: $white;
+        background-color: $container-color;
+        outline: none !important;
+        box-shadow: none;
+        border-color: $container-color;
+    }
+}
+
+.input-group-clear {
+    button {
+        width: 150px;
+    }
+}
+
+.browse-search::-webkit-input-placeholder {
+    text-align: left;
+}
+
+.browse-search::-moz-placeholder {
+    text-align: left;
+}
+
+.browse-search:focus,
+.browse-search:active {
+    outline: none;
+    border: none;
+}
+
+.backspace {
+    cursor: pointer;
+    fill: $danger;
+    position: absolute;
+    right: 0;
+    margin-right: 5%;
+}
+
+.browse-grid {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    .movie-card {
+        margin: 10px;
+        margin-bottom: 15px;
+        margin-top: 15px;
+
+        .poster-title {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            height: 40px;
+            font-size: 16px;
+        }
+
+        img {
+            min-height: 260px;
+            max-height: 260px;
+            object-fit: contain;
+        }
+        .card {
+            cursor: pointer;
+            min-height: 440px;
+            max-height: 460px;
+            width: 230px;
+        }
+
+        button {
+            padding: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
+            max-height: 40px;
+            font-size: 14px;
+        }
+    }
+}
+
+.movie-list-container {
+    height: 600px;
+}
+
+.movie-list-section h2 {
+    margin-left: 50px;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.movie-list {
+    display: flex;
+    flex-direction: row;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+::-webkit-scrollbar {
+    height:10px;
+    background-color: $card-color;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 50rem;
+    background-color: $warning;
+}
+
+.movie-card {
+    padding-left: 5px;
+    padding-right: 5px;
+    transition: transform 250ms;
+
+    .poster-title {
+        height: 60px;
+        font-size: 18px;
+    }
+
+    img {
+        width: 100%;
+        height: 320px;
+        max-height: 320px;
+        object-fit: contain;
+    }
+
+    .card {
+        cursor: pointer;
+        min-height: 500px;
+        max-height: 550px;
+        width: 270px;
+    }
+}
+
+.movie-card:hover {
+    transform: scale(1.04);
+}
+
+.movie-page {
+    hr {
+        background-color: $dark;
+    }
+}
+
+.movie-page-container {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.review-container {
+    input {
+        background-color: $nav-color;
+        color: $white;
+        border-color: $nav-color;
+    }
+
+    input:active,
+    input:focus {
+        color: $white;
+        background-color: $nav-color;
+        outline: none !important;
+        box-shadow: none;
+        border-color: $info;
+    }
+
+    input[type='number'] {
+        text-align: right;
+    }
+
+    span {
+        background-color: $nav-color;
+        color: $white;
+        border-color: $nav-color;
+    }
+
+    textarea {
+        font-size: 1.2em;
+        min-height: 150px;
+        height: 200px;
+        max-height: 250px;
+        background-color: $nav-color;
+        border-color: $nav-color;
+        color: $white;
+    }
+
+    textarea:active,
+    textarea:focus {
+        color: $white;
+        background-color: $nav-color;
+        outline: none !important;
+        box-shadow: none;
+        border-color: $info;
+    }
+
+    select {
+        background-color: $nav-color;
+        color: $white;
+        border-color: $nav-color;
+    }
+
+    select:active,
+    select:focus {
+        outline: none !important;
+        box-shadow: none;
+        border-color: $nav-color;
+    }
+
+    select:disabled {
+        background-color: $nav-color;
+    }
+}
+
+.review {
+    textarea {
+        font-size: 1em;
+        min-height: 100px;
+        height: 150px;
+        max-height: 200px;
+        background-color: $container-color;
+        border-color: $container-color;
+        color: $white;
+    }
+
+    textarea:active,
+    textarea:focus {
+        color: $white;
+        background-color: $container-color;
+        outline: none !important;
+        box-shadow: none;
+        border-color: $container-color;
+    }
+}
+
+.arrow {
+    height: 200px;
+}
+
+.poster {
+    max-height: 400px;
+    object-fit: contain;
+}
 
 .login-container {
     height: 500px;
@@ -74,7 +388,100 @@ body {
     margin: auto;
 }
 
+.no-caret:after {
+    display: none;
+}
 
+.search-bar {
+    width: 600px;
+}
 
+// CUSTOM PRESETS
 
+.opacity-60 {
+    filter: opacity(60%);
+}
 
+.opacity-80 {
+    filter: opacity(80%);
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.w-15 {
+    width: 15% !important;
+}
+
+.w-20 {
+    width: 20% !important;
+}
+
+.w-30 {
+    width: 30% !important;
+}
+
+.w-40 {
+    width: 40% !important;
+}
+
+.w-60 {
+    width: 60% !important;
+}
+
+.w-70 {
+    width: 70% !important;
+}
+
+.navbar {
+    background-color: $nav-color;
+}
+
+.container {
+    background-color: $container-color;
+}
+
+.card {
+    background-color: $card-color;
+}
+
+.btn-dark {
+    background-color: $nav-color;
+}
+
+.btn-dark-yellow {
+    background-color: $container-color;
+    color: $warning;
+}
+
+.btn-dark-yellow:hover {
+    background-color: $warning;
+}
+
+.btn-dark-info {
+    background-color: $nav-color;
+    color: $info;
+}
+
+.btn-dark-info:hover {
+    background-color: $info;
+}
+
+.btn-dark-danger {
+    background-color: $nav-color;
+    color: $danger;
+}
+
+.btn-dark-danger:hover {
+    background-color: $danger;
+}
+
+.btn-secondary-danger {
+    background-color: $container-color;
+    color: $danger;
+}
+
+.btn-secondary-danger:hover {
+    background-color: $danger;
+}
