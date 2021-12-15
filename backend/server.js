@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const PORT = process.env.PORT || 4000;
 const path = require('path');
-// const movieRoute = require('./routes/movieRoute');
+const movieRoute = require('./routes/movieRoute');
 const userRoute = require('./routes/userRoute');
 
 dotenv.config();
@@ -19,6 +19,8 @@ db.once('open', function() {
 });
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
+
+app.use('/movies',movieRoute);
 app.use('/account',userRoute);
 
 app.listen(PORT,function(){
