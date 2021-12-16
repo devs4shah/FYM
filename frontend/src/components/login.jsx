@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { setInStorage } from './utils/storage';
+import { setInStorage } from '../utils/storage';
 import { useHistory } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import { useSelector, useDispatch } from 'react-redux';
-import { setUser } from './actions';
+import { setUser } from '../actions';
 
 import checkedIcon from './assets/img/checked.png';
    
