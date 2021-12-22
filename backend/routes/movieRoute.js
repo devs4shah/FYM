@@ -3,14 +3,15 @@ const router = express.Router();
 
 const Movie = require('../models/Movie');
 
-router.use(function(req,res,next){
-    for(var key in req.query){
-        req.query[key.toLowerCase()]=req.query[key];
+// middleware to lowercase query params for case insensitive matching
+router.use(function (req, res, next) {
+    for (var key in req.query) {
+        req.query[key.toLowerCase()] = req.query[key];
     }
     next();
 });
 
-router.route('/').get(function(req,res){
+router.route('/').get(function (req, res) {
     const {
         random,
         search,
@@ -23,16 +24,17 @@ router.route('/').get(function(req,res){
         minMetascore,
         actor,
         type,
-    }=req.query;
+    } = req.query;
+    let query = {};
 
-    let query={};
+    if (title) {
+        query.Title = { $regex: title, $options: 'i' };
+    }
 
-    if(title){
-        query.Title = { $regex: title, $options: 'i'};
+    if (genre) {
+        query.Genre = { $regex: genre, $options: 'i' };
     }
-    if(genre){
-        query.Genre= { $regex: genre, $option:'i'};
-    }
+
     if (year) {
         query.Year = year;
     }
@@ -53,14 +55,13 @@ router.route('/').get(function(req,res){
         query.Type = type;
     }
 
-    if(random == 'true'){
+    if (random == 'true') {
         Movie.aggregate(
-            [{$match:query},{$sample:{size:40}}],
-            function(err,movies){
-                if(err){
+            [{ $match: query }, { $sample: { size: 40 } }],
+            function (err, movies) {
+                if (err) {
                     console.log(err);
-                }
-                else{
+                } else {
                     res.json(movies);
                 }
             }
@@ -84,18 +85,18 @@ router.route('/').get(function(req,res){
                 query,
             ],
         })
-
-        .limit(60)
-        .sort(sort && { [sort]:sortOrder})
-        .exec(function (err,movies){
-            if(err){
-                console.log(err);
-            } else {
-                res.json(movies);  
-            }
-        });
+            .limit(60)
+            .sort(sort && { [sort]: sortOrder })
+            .exec(function (err, movies) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.json(movies);
+                }
+            });
     }
 });
+
 router.route('/update').put(function (req, res) {
     const { body } = req;
     const { id, addReview, removeReview } = body;
@@ -115,58 +116,55 @@ router.route('/update').put(function (req, res) {
     }
 
     Movie.findOneAndUpdate(
-        {_id:id},
+        { _id: id },
         params,
-        {new:true,upsert:true},
-        function(err,result){
-            if(err){
+        { new: true, upsert: true },
+        function (err, result) {
+            if (err) {
                 console.log(err);
-                res.send({success:false, message: err});
-
-            } else{
-                res.send({success:true,updated:result});
+                res.send({ success: false, message: err });
+            } else {
+                res.send({ success: true, updated: result });
             }
         }
     );
 });
 
-router.route('/movie').get(function(req,res){
-    Movie.count().exec(function (err,count){
-
-        let random=Math.floor(Math.random()*count);
+router.route('/movie/').get(function (req, res) {
+    Movie.count().exec(function (err, count) {
+        // Get a random entry
+        let random = Math.floor(Math.random() * count);
 
         Movie.findOne()
-        .skip(random)
-        .exec(function (err,movie){
-            res.json(movie);
-        });
+            .skip(random)
+            .exec(function (err, movie) {
+                res.json(movie);
+            });
     });
 });
 
-router.route('/movie/:id').get(function(req,res){
-    let id=req.params.id;
+router.route('/movie/:id').get(function (req, res) {
+    let id = req.params.id;
 
-    Movie.findById(id, function(err,movie){
+    Movie.findById(id, function (err, movie) {
         res.json(movie);
     });
 });
 
-router.route('/:ids').get(function (req,res){
-    let ids=req.param.ids;
+router.route('/:ids').get(function (req, res) {
+    let ids = req.params.ids;
 
-    ids=ids.split(',');
+    ids = ids.split(',');
 
     ids.pop();
 
-    Movie.find({ _id: {$in:ids}}, function (err,movies){
-        if(err){
+    Movie.find({ _id: { $in: ids } }, function (err, movies) {
+        if (err) {
             console.log(err);
-                } else{
-                    res.json(movies);
-                }
+        } else {
+            res.json(movies);
+        }
     });
 });
 
-module.exports=router;
-
-
+module.exports = router;
