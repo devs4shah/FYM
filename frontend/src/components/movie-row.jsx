@@ -103,11 +103,11 @@ export default function MovieRow(props) {
                             width='1.8em'
                             height='1.5em'
                             viewBox='0 0 16 16'
-                            class='bi bi-chevron-left'
+                            className='bi bi-chevron-left'
                             fill='currentColor'
                             xmlns='http://www.w3.org/2000/svg'>
                             <path
-                                fill-rule='evenodd'
+                                fillRule='evenodd'
                                 d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'
                             />
                         </svg>
@@ -138,11 +138,11 @@ export default function MovieRow(props) {
                             width='1.8em'
                             height='1.5em'
                             viewBox='0 0 16 16'
-                            class='bi bi-chevron-right'
+                            className='bi bi-chevron-right'
                             fill='currentColor'
                             xmlns='http://www.w3.org/2000/svg'>
                             <path
-                                fill-rule='evenodd'
+                                fillRule='evenodd'
                                 d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'
                             />
                         </svg>

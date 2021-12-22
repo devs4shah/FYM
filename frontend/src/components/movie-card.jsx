@@ -4,7 +4,7 @@ import {useHistory} from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import { useSelector,useDispatch} from 'react-redux';
 import axios from 'axios';
-import {setUser} from '.actions';
+import { setUser } from '../actions';
 
 export default function MovieCard(props) {
     const history = useHistory();
@@ -17,13 +17,13 @@ export default function MovieCard(props) {
         // checks if user has liked or saved movie
         if (user.currentUser) {
             if (
-                user.currentUser.Liked.find((item) => item == props.movie._id)
+                user.currentUser.Liked.find((item) => item === props.movie._id)
             ) {
                 setLiked(true);
             }
 
             if (
-                user.currentUser.Saved.find((item) => item == props.movie._id)
+                user.currentUser.saved.find((item) => item === props.movie._id)
             ) {
                 setSaved(true);
             }
@@ -130,7 +130,7 @@ export default function MovieCard(props) {
                                 >
                                     {props.movie.imdbRating}
                                 </span>{' '}
-                                {props.movie.Metascore != 'N/A' ? (
+                                {props.movie.Metascore !== 'N/A' ? (
                                     <span
                                         className="badge badge-success h-100 badge-pill w-25"
                                         title="Metascore"
@@ -147,7 +147,7 @@ export default function MovieCard(props) {
                         <div className="d-flex justify-content-between">
                             <button
                                 className={
-                                    isSaved == true
+                                    isSaved === true
                                         ? 'btn btn-info'
                                         : 'btn btn-outline-info'
                                 }
@@ -164,11 +164,11 @@ export default function MovieCard(props) {
                                     }
                                 }}
                             >
-                                {isSaved == true ? '✓ Saved' : '+ For Later'}
+                                {isSaved === true ? '✓ Saved' : '+ For Later'}
                             </button>
                             <button
                                 className={
-                                    isLiked == true
+                                    isLiked === true
                                         ? 'btn btn-danger'
                                         : 'btn btn-outline-danger'
                                 }
@@ -185,7 +185,7 @@ export default function MovieCard(props) {
                                     }
                                 }}
                             >
-                                {isLiked == true ? 'Liked' : 'Like'}
+                                {isLiked === true ? 'Liked' : 'Like'}
                             </button>
                         </div>
                     </Card.Footer>
