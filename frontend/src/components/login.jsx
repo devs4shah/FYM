@@ -5,8 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from '../actions';
-
-import checkedIcon from './assets/img/checked.png';
+import checkedIcon from '../assets/img/checked.png';
    
 export default function Login(props) {
    
@@ -44,15 +43,13 @@ export default function Login(props) {
 
     // redirect to wherever user came from
     function redirect() {
-        // if (props.location.state) {
-        //     history.push('/Login/' + props.location.state.redirectID);
-        // } else {
-        //    history.goBack();
-        // }
-
-        //Change
-        history.goBack()
+        if (props.location.state) {
+            history.push('/movie/' + props.location.state.redirectID);
+        } else {
+            history.goBack();
+        }
     }
+
 
     // sign up request
     function signUpRequest() {
@@ -177,23 +174,23 @@ export default function Login(props) {
         return (
             <form className='container rounded p-4 pt-5 text-white h-100 d-flex flex-column justify-content-between'>
                 <div>
-                    <div class='form-group'>
+                    <div className='form-group'>
                         <label>Username</label>
                         <input
                             name='username'
                             type='text'
-                            class='form-control'
+                            className='form-control'
                             placeholder='Enter username'
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                         />
                     </div>
-                    <div class='form-group'>
+                    <div className='form-group'>
                         <label>Password</label>
                         <input
                             name='password'
                             type='password'
-                            class='form-control'
+                            className='form-control'
                             placeholder='Enter Password'
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -201,16 +198,16 @@ export default function Login(props) {
                     </div>
                 </div>
                 {error ? (
-                    <small class='form-text text-danger'>{error}</small>
+                    <small className='form-text text-danger'>{error}</small>
                 ) : (
                     ''
                 )}
                 <div>
-                    <div class='form-group'>
-                        <small class='form-text text-muted'>
+                    <div className='form-group'>
+                        <small className='form-text text-muted'>
                             Don't have an account?
                             <a
-                                class='text-warning text-decoration-none pointer'
+                                className='text-warning text-decoration-none pointer'
                                 onClick={() => {
                                     setMode(true);
                                     setError();
@@ -223,7 +220,7 @@ export default function Login(props) {
                     <button
                         type='submit'
                         onClick={() => signInRequest()}
-                        class='btn btn-warning w-100'>
+                        className='btn btn-warning w-100'>
                         Sign In
                     </button>
                 </div>
@@ -235,35 +232,35 @@ export default function Login(props) {
     function signUpContainer() {
         return (
             <form className='container rounded p-4 text-white h-100 d-flex flex-column justify-content-between'>
-                <div class='form-group'>
+                <div className='form-group'>
                     <label>Name</label>
                     <input
                         name='name'
                         type='name'
-                        class='form-control'
+                        className='form-control'
                         placeholder='Enter name'
                         value={name}
                         maxLength='35'
                         onChange={(e) => setName(e.target.value)}
                     />
                 </div>
-                <div class='form-group'>
+                <div className='form-group'>
                     {validUsername()}
                     <input
                         name='username'
                         type='text'
-                        class='form-control'
+                        className='form-control'
                         placeholder='Enter username'
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                     />
                 </div>
-                <div class='form-group'>
+                <div className='form-group'>
                     <label>Password</label>
                     <input
                         name='password'
                         type='password'
-                        class='form-control'
+                        className='form-control'
                         placeholder='Enter Password'
                         value={password}
                         onChange={(e) => {
@@ -272,7 +269,7 @@ export default function Login(props) {
                         }}
                     />
                 </div>
-                <div class='form-group'>
+                <div className='form-group'>
                     <div className='d-flex justify-content-between flex-column h-100'>
                         {/* password requirements */}
                         <small
@@ -296,16 +293,16 @@ export default function Login(props) {
                     </div>
                 </div>
                 {error ? (
-                    <small class='form-text text-danger'>{error}</small>
+                    <small className='form-text text-danger'>{error}</small>
                 ) : (
                     ''
                 )}
 
-                <div class='form-group'>
-                    <small class='form-text text-muted'>
+                <div className='form-group'>
+                    <small className='form-text text-muted'>
                         Already have an account?
                         <a
-                            class='text-warning text-decoration-none pointer'
+                            className='text-warning text-decoration-none pointer'
                             onClick={() => {
                                 setMode(false);
                                 setError();
@@ -319,7 +316,7 @@ export default function Login(props) {
                 <button
                     type='submit'
                     onClick={() => signUpRequest()}
-                    class='btn btn-warning'
+                    className='btn btn-warning'
                     disabled={!buttonEnabled}>
                     Sign Up
                 </button>
