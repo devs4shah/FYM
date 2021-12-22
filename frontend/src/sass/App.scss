@@ -209,6 +209,7 @@ body {
             padding-right: 10px;
             max-height: 40px;
             font-size: 14px;
+    
         }
     }
 }
@@ -281,90 +282,6 @@ body {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-}
-
-.review-container {
-    input {
-        background-color: $nav-color;
-        color: $white;
-        border-color: $nav-color;
-    }
-
-    input:active,
-    input:focus {
-        color: $white;
-        background-color: $nav-color;
-        outline: none !important;
-        box-shadow: none;
-        border-color: $info;
-    }
-
-    input[type='number'] {
-        text-align: right;
-    }
-
-    span {
-        background-color: $nav-color;
-        color: $white;
-        border-color: $nav-color;
-    }
-
-    textarea {
-        font-size: 1.2em;
-        min-height: 150px;
-        height: 200px;
-        max-height: 250px;
-        background-color: $nav-color;
-        border-color: $nav-color;
-        color: $white;
-    }
-
-    textarea:active,
-    textarea:focus {
-        color: $white;
-        background-color: $nav-color;
-        outline: none !important;
-        box-shadow: none;
-        border-color: $info;
-    }
-
-    select {
-        background-color: $nav-color;
-        color: $white;
-        border-color: $nav-color;
-    }
-
-    select:active,
-    select:focus {
-        outline: none !important;
-        box-shadow: none;
-        border-color: $nav-color;
-    }
-
-    select:disabled {
-        background-color: $nav-color;
-    }
-}
-
-.review {
-    textarea {
-        font-size: 1em;
-        min-height: 100px;
-        height: 150px;
-        max-height: 200px;
-        background-color: $container-color;
-        border-color: $container-color;
-        color: $white;
-    }
-
-    textarea:active,
-    textarea:focus {
-        color: $white;
-        background-color: $container-color;
-        outline: none !important;
-        box-shadow: none;
-        border-color: $container-color;
-    }
 }
 
 .arrow {

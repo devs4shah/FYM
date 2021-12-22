@@ -1,216 +1,231 @@
 const express = require('express');
-const {remove} = require('../models/User');
-const router=express.Router();
-const User=require('../models/User');
-const UserSession=require('../models/UserSession');
-const bodyParser=require('body-parser');
+const { remove } = require('../models/User');
+const router = express.Router();
+const User = require('../models/User');
+const UserSession = require('../models/UserSession');
 
-
-router.route('/update').put(function(req,res){
-    const {body}=req;
+router.route('/update').put(function (req, res) {
+    const { body } = req;
     const {
         id,
         addSaved,
         removeSaved,
         addLiked,
-        removeLiked
-        }=body;
+        removeLiked,
 
-        let params={};
+    } = body;
 
-        if(addSaved){
-            params={$addToSet:{Saved:addSaved}};
-        }
-        if (removeSaved) {
-            params = { $pull: { Saved: removeSaved } };
-        }
-    
-        if (addLiked) {
-            params = { $addToSet: { Liked: addLiked } };
-        }
-    
-        if (removeLiked) {
-            params = { $pull: { Liked: removeLiked } };
-        }
+    let params = {};
 
-        User.findOnceAndUpdate(
-            { _id:id } ,
-            param,
-            { new : true, upsert : true },   
-            function(err,result){
-                if(err){
-                    console.log(err);
-                    res.send(err);
-                } else {
-                    res.send(result);
-                }
-            }         
-        ); 
+    if (addSaved) {
+        params = { $addToSet: { saved: addSaved } };
+    }
+
+    if (removeSaved) {
+        params = { $pull: { saved: removeSaved } };
+    }
+
+    if (addLiked) {
+        params = { $addToSet: { Liked: addLiked } };
+    }
+
+    if (removeLiked) {
+        params = { $pull: { Liked: removeLiked } };
+    }
+    User.findOneAndUpdate(
+        { _id: id },
+        params,
+        { new: true, upsert: true },
+        function (err, result) {
+            if (err) {
+                console.log(err);
+                res.send(err);
+            } else {
+                res.send(result);
+            }
+        }
+    );
 });
 
-router.route('/register').post(function  (req,res,next){
-    const { body }= req;
-    const {name,password}=body;
-    let{username}=body;
-    
-    if(!name){
+router.get('/user/:username',function (req, res) {
+    let username = req.params.username;
+    console.log(username);
+    User.findOne({ username: username }, function (err, user) {
+        if (err) {
+            console.log(error);
+        } else {
+            console.log(user);
+           return res.json(user);
+        }
+    });
+});
+
+router.route('/register').post(function  (req, res, next) {
+    const { body } = req;
+    const { password, name } = body;
+    let { username } = body;
+    console.log('Username:',username,'password:',password,'name:',name);
+
+    if (!name) {
         return res.send({
-            success:false,
-            message:'Name cannot be blank',
+            success: false,
+            message: 'Name cannot be blank.',
         });
     }
-    if(!username){
-        console.log(username);
+    if (!username) {
         return res.send({
-            success:false,
-            message:'Username cannot be blank',
+            success: false,
+            message: 'Username cannot be blank.',
         });
-        }
-    if(!password){
+    }
+    if (!password) {
         return res.send({
-            success:false,
+            success: false,
             message: 'Password cannot be blank.',
         });
     }
-    username=username.trim();
-    if(username.length >14){
+     username = username.trim();
+    if (username.length > 14) {
         return res.send({
             success: false,
-            message:'Username cannot be longer than 14 characters.',
+            message: 'Username cannot be longer than 14 characters.',
         });
-    }
-    else if(username.length < 6){
+    } else if (username.length < 6) {
         return res.send({
             success: false,
-            message: 'Username must be at least 6 characters.'
+            message: 'Username must be at least 6 characters.',
         });
     }
+    User.find(
+        {
+            username: username,
+        },
+        (err, previousUsers) => {
+            console.log('PreviousUser',previousUsers);
+            if (err) {
+                return res.send({
+                    success: false,
+                    message: 'Server error.',
+                });
+            } else if (previousUsers.length > 0) {
+                return res.send({
+                    success: false,
+                    message: 'Error: Account with username already exists.',
+                });
+            }
+
+            // Save the new user
+           const newUser = new User({
+                name: name,
+                username: username,
+            });
+
+            newUser.set({ password: newUser.generateHash(password) });
+
+            newUser.save((err, user) => {
+                console.log('userlogged:',user);
+                if (err) {
+                    console.log('error and save',err)
+                    return res.send({
+                        success: false,
+                        message: 'Server error.',
+                    });
+                } else {
+                    const userSession = new UserSession({ userId: user._id });
+
+                    userSession.save((err, doc) => {
+                        if (err) {
+                            return res.send({
+                                success: false,
+                                message: 'Error: server error',
+                            });
+                        }
+                        return res.send({
+                            success: true,
+                            message: 'Valid sign in',
+                            token: doc._id,
+                            user: user,
+                        });
+                    });
+                }
+            });
+        }
+    );
+});
+
+router.route('/login').post(function (req, res, next) {
+    const { body } = req;
+    const { password } = body;
+    let { username } = body;
+
+    if (!username) {
+        return res.send({
+            success: false,
+            message: 'Username cannot be blank.',
+        });
+    }
+    if (!password) {
+        return res.send({
+            success: false,
+            message: 'Password cannot be blank.',
+        });
+    }
+
+    username = username.trim();
 
     User.find(
         {
-            username:username,
+            username: username,
         },
-        (err,previousUsers)=>{
-            if(err){
+        (err, users) => {
+            if (err) {
                 return res.send({
-                    success:false,
-                    message:"Server error.",
+                    success: false,
+                  message: 'Server error.',
                 });
             }
-            else if (previousUsers.length>0){
+            if (users.length != 1) {
                 return res.send({
-                    success:false,
-                    message:'Error:Account with username already exists.'
+                    success: false,
+                    message: 'Either username and/or password is incorrect.',
+                });
+            }
+            const user = users[0];
+            console.log(user);
+
+            if (!user.validPassword(password)) {
+                return res.send({
+                    success: false,
+                    message: 'Either username and/or password is incorrect.',
                 });
             }
 
-            const newUser=new User({
-                name:name,
-                username:username,
-            });
+            const userSession = new UserSession({ userId: user._id });
 
-            newUser.set({password:newUser.generateHash(password)});
-            newUser.save((err,user)=>{
-                console.log(user);
-                if(err){
+            userSession.save((err, doc) => {
+                if (err) {
                     return res.send({
-                        success:false,
-                        message:'Server error.',
+                        success: false,
+                        message: 'Error: server error',
                     });
                 }
-                else{
-                 const userSession = new UserSession();
-                userSession.userId=user._id;
-                userSession.save((err,doc)=>{
-                if(err){
-                    return res.send({
-                        success:false,
-                        message:'Error: server error'
-                    });
-                }
-
                 return res.send({
-                    success:true,
-                    message:'Valid sign in',
-                     token:doc._id
-                }) 
-            })
-                }
-            })
-
-        });
-    });
-     
-    router.route('/login').post(function(req,res,next){
-        const {body}=req;
-        const {password}=body;
-        let {username}=body;
-
-        if(!username){
-            return res.send({
-                success:false,
-                message:'Username cannot be blank.'
+                    success: true,
+                    message: 'Valid sign in',
+                    token: doc._id,
+                    user: user,
+                });
             });
         }
-        if(!password){
-            return res.send({
-                success:false,
-                message:'Password cannot be blank.',
-            })
-        }
-        username=username.trim();
-
-        User.find({
-            username:username,
-        },
-        (err,users)=>{
-            if(err){
-                return res.send({
-                    success:false,
-                    message:'Server error.'
-                });
-            }
-            if(users.length!=1){
-                return res.send({
-                    success:false,
-                    message:'Either username and/or password is incorrect'
-                });
-            }
-            const user=users[0];
-
-            if(!user.validPassword(password)){
-                return res.send({
-                    success:false,
-                    message:'Either username and/or password is incorrect'
-                });
-            }
-
-            const userSession = new UserSession();
-                userSession.userId=user._id;
-                userSession.save((err,doc)=>{
-                if(err){
-                    return res.send({
-                        success:false,
-                        message:'Error: server error'
-                    });
-                }
-
-                return res.send({
-                    success:true,
-                    message:'Valid sign in',
-                     token:doc._id
-                }) 
-            })
-
-        })
-
-    })
+    );
+});
 
 router.route('/logout').post(function (req, res, next) {
-    
+    // Get the token
     const { query } = req;
     const { token } = query;
-    
+    // ?token=test
+    // Verify the token is one of a kind and it's not deleted.
     UserSession.findOneAndUpdate(
         {
             _id: token,
@@ -237,7 +252,6 @@ router.route('/logout').post(function (req, res, next) {
         }
     );
 });
-
 
 router.route('/verify').get(function (req, res, next) {
     // Get the token
@@ -279,6 +293,5 @@ router.route('/verify').get(function (req, res, next) {
         }
     );
 });
+module.exports = router;
 
-
-    module.exports=router;

@@ -9242,7 +9242,7 @@
     "postcss-overflow-shorthand" "^2.0.0"
     "postcss-page-break" "^2.0.0"
     "postcss-place" "^4.0.1"
-    "postcss-pseudo-class-any-link" "^6.0.0"
+    "postcss-pseudo--any-link" "^6.0.0"
     "postcss-replace-overflow-wrap" "^3.0.0"
     "postcss-selector-matches" "^4.0.0"
     "postcss-selector-not" "^4.0.0"
