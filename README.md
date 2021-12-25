@@ -29,6 +29,17 @@ Developed REST API using Node and Express. Used MongoDB Atlas for database.
 **Note:** This app requires an active github account to use.
 
 ## Screenshots
+##### Home Page
+![](assets/homepage.PNG)
+##### Movie Page
+![](assets/moviepage.PNG)
+![](assets/moviepage2.PNG)
+##### User Profile
+![](assets/loginpage.PNG)
+##### Search Results
+![](assets/searchmovie.PNG)
+
+##### Video
 
 ## Future Scope
 1. We can put links of the various websites which show that particular movie 
