@@ -10,34 +10,3 @@ const rows = [
     { title: 'TV Shows', params: { random: true, type: 'series' } },
     { title: '2020', params: { random: true, year: '2020' } },
 ];
-
-export default function HomePage() {
-    useEffect(() => {
-        document.title = 'Home | FYM';
-    }, []);
-
-    return (
-        <CSSTransition
-            in={true}
-            appear={true}
-            timeout={600}
-            classNames="fade"
-            unmountOnExit
-        >
-            <div>
-                <div className="pt-4">
-                    {/* map rows */}
-                    {rows.map(({ title, params }) => {
-                        return (
-                            <MovieRow
-                                key={title}
-                                title={title}
-                                params={params}
-                            ></MovieRow>
-                        );
-                    })}
-                </div>
-            </div>
-        </CSSTransition>
-    );
-}
