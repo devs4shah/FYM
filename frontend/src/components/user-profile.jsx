@@ -16,13 +16,11 @@ export default function UserProfile({match}) {
     const [likedQuery, setLikedQuery] = useState(''); // liked list query
     const [savedQuery, setSavedQuery] = useState(''); 
 
-    
     useEffect(() => {
 
         console.log('PropsID---',id);
         // get user and update state on props change
         axios.get('/account/user/' + id).then((res) => {
-            
             if (res.data) {
 
                 // set user state
@@ -43,7 +41,7 @@ export default function UserProfile({match}) {
                 }
 
                 if (res.data.saved) {
-                    
+
                     let query = '';
 
                     res.data.saved.forEach((id) => {
@@ -84,7 +82,7 @@ export default function UserProfile({match}) {
                                         </h4>
                                         <h3 className='m-0'>{user.username}</h3>
                                     </div>
-    
+
                                     <br />
                                     <div className='d-flex m-1'>
                                         <h5 className='w-20 m-0'>
@@ -124,4 +122,3 @@ export default function UserProfile({match}) {
             </CSSTransition>
         );
     }
-    
