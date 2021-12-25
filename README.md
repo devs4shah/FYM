@@ -25,7 +25,6 @@ Developed REST API using Node and Express. Used MongoDB Atlas for database.
 3. Run the command ``` nodemon server.js```
 4. Run the command ``` cd frontend ```
 5. Run the command ``` npm run start ```
-6. Check it on localhost:4000
 
 **Note:** This app requires an active github account to use.
 
