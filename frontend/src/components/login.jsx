@@ -118,3 +118,269 @@ export default function Login(props) {
             setLoading(false);
         });
     }
+
+    // username requirements
+    function validUsername() {
+        if (username.length >= 6 && username.length <= 14) {
+            return (
+                <div className='d-flex justify-content-between'>
+                    <label>Username</label>
+                    <small className='text-success'>6-14 characters</small>
+                </div>
+            );
+        } else {
+            return (
+                <div className='d-flex justify-content-between'>
+                    <label>Username</label>
+                    <small className='text-danger'>6-14 characters</small>
+                </div>
+            );
+        }
+    }
+
+    // function to update password requirements in realtime
+    function validPassword(pass) {
+        if (regex.length.test(pass)) {
+            setPassMin(true);
+        } else {
+            setPassMin(false);
+        }
+
+        if (regex.digit.test(pass)) {
+            setPassNum(true);
+        } else {
+            setPassNum(false);
+        }
+
+        if (regex.capital.test(pass)) {
+            setPassCapital(true);
+        } else {
+            setPassCapital(false);
+        }
+
+        if (
+            regex.length.test(pass) &&
+            regex.digit.test(pass) &&
+            regex.capital.test(pass)
+        ) {
+            setButtonEnabled(true);
+        } else {
+            setButtonEnabled(false);
+        }
+    }
+
+    // sign in container
+    function signInContainer() {
+        return (
+            <form className='container rounded p-4 pt-5 text-white h-100 d-flex flex-column justify-content-between'>
+                <div>
+                    <div className='form-group'>
+                        <label>Username</label>
+                        <input
+                            name='username'
+                            type='text'
+                            className='form-control'
+                            placeholder='Enter username'
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
+                    </div>
+                    <div className='form-group'>
+                        <label>Password</label>
+                        <input
+                            name='password'
+                            type='password'
+                            className='form-control'
+                            placeholder='Enter Password'
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
+                </div>
+                {error ? (
+                    <small className='form-text text-danger'>{error}</small>
+                ) : (
+                    ''
+                )}
+                <div>
+                    <div className='form-group'>
+                        <small className='form-text text-muted'>
+                            Don't have an account?
+                            <a
+                                className='text-warning text-decoration-none pointer'
+                                onClick={() => {
+                                    setMode(true);
+                                    setError();
+                                }}>
+                                {' '}
+                                Sign up
+                            </a>
+                        </small>
+                    </div>{' '}
+                    <button
+                        type='submit'
+                        onClick={() => signInRequest()}
+                        className='btn btn-warning w-100'>
+                        Sign In
+                    </button>
+                </div>
+            </form>
+        );
+    }
+
+    // sign up container
+    function signUpContainer() {
+        return (
+            <form className='container rounded p-4 text-white h-100 d-flex flex-column justify-content-between'>
+                <div className='form-group'>
+                    <label>Name</label>
+                    <input
+                        name='name'
+                        type='name'
+                        className='form-control'
+                        placeholder='Enter name'
+                        value={name}
+                        maxLength='35'
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                </div>
+                <div className='form-group'>
+                    {validUsername()}
+                    <input
+                        name='username'
+                        type='text'
+                        className='form-control'
+                        placeholder='Enter username'
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                </div>
+                <div className='form-group'>
+                    <label>Password</label>
+                    <input
+                        name='password'
+                        type='password'
+                        className='form-control'
+                        placeholder='Enter Password'
+                        value={password}
+                        onChange={(e) => {
+                            setPassword(e.target.value);
+                            validPassword(e.target.value);
+                        }}
+                    />
+                </div>
+                <div className='form-group'>
+                    <div className='d-flex justify-content-between flex-column h-100'>
+                        {/* password requirements */}
+                        <small
+                            className={
+                                passMin ? 'text-success' : 'text-danger'
+                            }>
+                            - Min. 6 characters
+                        </small>
+                        <small
+                            className={
+                                passNum ? 'text-success' : 'text-danger'
+                            }>
+                            - Must contain number (0-9)
+                        </small>
+                        <small
+                            className={
+                                passCapital ? 'text-success' : 'text-danger'
+                            }>
+                            - Must contain a capital letter (A-Z)
+                        </small>
+                    </div>
+                </div>
+                {error ? (
+                    <small className='form-text text-danger'>{error}</small>
+                ) : (
+                    ''
+                )}
+
+                <div className='form-group'>
+                    <small className='form-text text-muted'>
+                        Already have an account?
+                        <a
+                            className='text-warning text-decoration-none pointer'
+                            onClick={() => {
+                                setMode(false);
+                                setError();
+                            }}>
+                            {' '}
+                            Login
+                        </a>
+                    </small>
+                </div>
+
+                <button
+                    type='submit'
+                    onClick={() => signUpRequest()}
+                    className='btn btn-warning'
+                    disabled={!buttonEnabled}>
+                    Sign Up
+                </button>
+            </form>
+        );
+    }
+
+    // get correct container based on state
+    function getContainer() {
+        if (loading) {
+            return (
+                <div className='container rounded p-4 text-white h-100 d-flex flex-column justify-content-center align-items-center'>
+                    <h5>Loading...</h5>
+                </div>
+            );
+        } else {
+            if (user.currentUser) {
+                return (
+                    <div className='container rounded p-4 text-white h-100'>
+                        <CSSTransition
+                            in={true}
+                            appear={true}
+                            timeout={600}
+                            classNames='fade'
+                            unmountOnExit>
+                            <div className='d-flex flex-column justify-content-center align-items-center h-100'>
+                                <h5>You're logged in</h5>
+                                <br />
+                                <br />
+                                <img
+                                    src={checkedIcon}
+                                    className='checked-icon'></img>
+                            </div>
+                        </CSSTransition>
+                    </div>
+                );
+            } else {
+                if (register) {
+                    return signUpContainer();
+                } else {
+                    return signInContainer();
+                }
+            }
+        }
+    }
+
+    return (
+        <CSSTransition
+            in={true}
+            appear={true}
+            timeout={600}
+            classNames='fade'
+            unmountOnExit>
+            <div>
+                {/* background */}
+                <div className='login-background'>
+                    <div className='background-default'></div>
+                    <div className='background-cover opacity-60'></div>
+                </div>
+                {/* login container */}
+                <div className='login-container'>{getContainer()}</div>
+              
+            </div>
+        </CSSTransition>
+    );
+}
+
