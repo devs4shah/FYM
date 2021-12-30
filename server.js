@@ -20,6 +20,18 @@ db.once('open', function() {
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
+if(process.env.NODE_ENV==='production')
+{
+    //set static folder
+    app.use(express.static('frontend/public'));
+    app.get('*', (req, res)=>
+    {
+        res.sendFile(path.resolve(__dirname, 'frontend', 'public', 'index.html'));
+
+    });
+
+}
+
 app.use('/movies',movieRoute);
 app.use('/account',userRoute);
 
